@@ -21,7 +21,8 @@ class App extends Component {
     search: ""
   };
 
-  focusClient = focus => () => {
+  focusClient = focus => e => {
+    console.log(e.currentTarget);
     this.setState({ client: focus });
   };
 
@@ -44,7 +45,15 @@ class App extends Component {
               }}
             />
           </div>
-          <List style={{ overflowY: "scroll", height: "80vh" }}>
+          <List
+            className="scrollbar"
+            style={{
+              overflowY: "scroll",
+              height: "80vh",
+              position: "relative",
+              left: "1px"
+            }}
+          >
             {clients
               .filter(e => {
                 let arr = [];
@@ -60,23 +69,60 @@ class App extends Component {
 
                 return arr.indexOf(search) !== -1;
               })
-              .map((e, i) => (
-                <ListItem dense key={i} button onClick={this.focusClient(e)}>
-                  <ListItemAvatar>
-                    <Avatar alt={`Clients #${i + 1}`} src={e.general.avatar} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={`${e.general.firstName} ${e.general.lastName}`}
-                    secondary={e.job.title}
-                  />
-                </ListItem>
-              ))}
+              .map((e, i) => {
+                if (e === client)
+                  return (
+                    <ListItem
+                      dense
+                      key={i}
+                      button
+                      onClick={this.focusClient(e)}
+                      style={{
+                        border: "1px solid #c5c5c5",
+                        borderRightColor: "white",
+                        borderRadius: "4px",
+                        borderTopRightRadius: "0",
+                        borderBottomRightRadius: "0"
+                      }}
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          alt={`Clients #${i + 1}`}
+                          src={e.general.avatar}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={`${e.general.firstName} ${e.general.lastName}`}
+                        secondary={e.job.title}
+                      />
+                    </ListItem>
+                  );
+                return (
+                  <ListItem dense key={i} button onClick={this.focusClient(e)}>
+                    <ListItemAvatar>
+                      <Avatar
+                        alt={`Clients #${i + 1}`}
+                        src={e.general.avatar}
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={`${e.general.firstName} ${e.general.lastName}`}
+                      secondary={e.job.title}
+                    />
+                  </ListItem>
+                );
+              })}
           </List>
         </section>
         <Grid
           container
           justify="flex-start"
-          style={{ flex: "3" }}
+          style={{
+            flex: "3",
+            border: "1px solid #c5c5c5",
+            margin: "16px 16px 0 0",
+            borderRadius: "4px"
+          }}
           wrap="nowrap"
           item={true}
         >
